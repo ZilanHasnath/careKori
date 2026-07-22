@@ -20,7 +20,7 @@ export default function PatientProfile() {
     }, []);
 
     useEffect(() => {
-        if (!id) return; // Wait until we have the ID
+        if (!id) return;
 
         fetch(`/api/patient/profile?id=${id}`)
             .then((res) => res.json())
@@ -69,7 +69,14 @@ export default function PatientProfile() {
                 </div>
             ) : (
                 <div className="space-y-2">
-                    <h1 className="text-xl font-bold">{patient.patientName}</h1>
+                    <div className='flex justify-around'>
+                        <h1 className="text-xl font-bold">{patient.patientName}</h1>
+                        <h1 className='text-2xl'>{patient.uniqueId}</h1>
+                    </div>
+
+
+
+
                     <p>Phone: {patient.phoneNumber}</p>
                     <p>Email: {patient.email}</p>
                     <p>Age: {patient.age}</p>
