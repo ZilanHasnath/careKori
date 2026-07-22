@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 interface PatientProgressLog {
@@ -21,7 +21,7 @@ interface PatientProgressLog {
     };
 }
 
-export default function FamilyPatientProgressPage() {
+function ProgressContent() {
     const searchParams = useSearchParams();
     const patientId = searchParams.get('patientId');
 
@@ -81,20 +81,17 @@ export default function FamilyPatientProgressPage() {
     const patientInfo = logs[0]?.patientId;
     const latestLog = logs.length > 0 ? logs[logs.length - 1] : null;
 
-    // Helper function to parse Blood Pressure "SYS/DIA"
     const parseBP = (bpStr?: string) => {
         if (!bpStr) return { sys: 0, dia: 0 };
         const parts = bpStr.split('/').map((val) => parseInt(val.trim(), 10));
         return { sys: parts[0] || 0, dia: parts[1] || 0 };
     };
 
-    // Calculate dynamic maximums for chart scaling
     const maxHeartRate = Math.max(...logs.map((l) => l.heartRate || 0), 100);
     const maxBP = Math.max(...logs.map((l) => parseBP(l.bloodPressure).sys), 160);
 
     return (
         <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
-            {/* Header */}
             <div className="border-b border-slate-100 pb-5">
                 <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
                     Daily Health Progress
@@ -114,7 +111,6 @@ export default function FamilyPatientProgressPage() {
                 </div>
             ) : (
                 <>
-                    {/* Key Vitals Summary */}
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div className="bg-white border border-slate-200/80 p-4 rounded-2xl shadow-xs">
                             <span className="text-[11px] font-medium text-slate-400 block">Latest Blood Pressure</span>
@@ -155,9 +151,7 @@ export default function FamilyPatientProgressPage() {
                         </div>
                     </div>
 
-                    {/* Vitals Trend Charts */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {/* Blood Pressure Chart */}
                         <div className="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-xs space-y-4">
                             <div className="flex justify-between items-center">
                                 <h2 className="text-sm font-bold text-slate-900">Blood Pressure Trend</h2>
@@ -183,7 +177,6 @@ export default function FamilyPatientProgressPage() {
 
                                     return (
                                         <div key={log._id || index} className="flex-1 flex flex-col items-center h-full justify-end group relative">
-                                            {/* Hover Tooltip */}
                                             <div className="absolute -top-8 hidden group-hover:flex bg-slate-900 text-white text-[10px] py-1 px-2 rounded-md shadow-md z-10 whitespace-nowrap">
                                                 {sys}/{dia} mmHg
                                             </div>
@@ -207,7 +200,6 @@ export default function FamilyPatientProgressPage() {
                             </div>
                         </div>
 
-                        {/* Heart Rate Chart */}
                         <div className="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-xs space-y-4">
                             <div className="flex justify-between items-center">
                                 <h2 className="text-sm font-bold text-slate-900">Heart Rate History</h2>
@@ -225,7 +217,6 @@ export default function FamilyPatientProgressPage() {
 
                                     return (
                                         <div key={log._id || index} className="flex-1 flex flex-col items-center h-full justify-end group relative">
-                                            {/* Hover Tooltip */}
                                             <div className="absolute -top-8 hidden group-hover:flex bg-slate-900 text-white text-[10px] py-1 px-2 rounded-md shadow-md z-10 whitespace-nowrap">
                                                 {hr} BPM
                                             </div>
@@ -246,7 +237,6 @@ export default function FamilyPatientProgressPage() {
                         </div>
                     </div>
 
-                    {/* Detailed Timeline List */}
                     <div className="space-y-4">
                         <h2 className="text-base font-bold text-slate-900">Detailed Daily Logs</h2>
                         <div className="space-y-3">
@@ -310,5 +300,22 @@ export default function FamilyPatientProgressPage() {
                 </>
             )}
         </div>
+    );
+}
+
+export default function FamilyPatientProgressPage() {
+    return (
+        <Suspense
+            fallback={
+                <div className="flex items-center justify-center min-h-[60vh]">
+                    <div className="flex items-center gap-3 text-slate-500 font-medium text-sm">
+                        <span className="w-4 h-4 border-2 border-slate-900 border-t-transparent rounded-full animate-spin"></span>
+                        Loading health progress report...
+                    </div>
+                </div>
+            }
+        >
+            <ProgressContent />
+        </Suspense>
     );
 }
