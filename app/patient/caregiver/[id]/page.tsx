@@ -143,7 +143,7 @@ export default function CaregiverDetailPage() {
                         </p>
                     </div>
                     <span className="self-start sm:self-auto bg-green-50 text-green-700 text-xs font-semibold px-2.5 py-1 rounded-md border border-green-200">
-                        {caregiver.accountType} Account
+                        {caregiver.accountType} By careKori
                     </span>
                 </div>
 

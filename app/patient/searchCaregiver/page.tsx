@@ -14,7 +14,9 @@ interface Caregiver {
     sex: 'Male' | 'Female' | 'Other';
     age: number;
     nationalIdPassportNo: string;
+    speciality: string[];
     accountType: 'Pending' | 'Approved';
+    matchPercentage?: number;
     createdAt: string;
     updatedAt: string;
 }
@@ -22,14 +24,14 @@ interface Caregiver {
 export default function SearchCaregiverPage() {
     const [location, setLocation] = useState('');
     const [sex, setSex] = useState('');
-    const [specialty, setSpecialty] = useState('');
+    const [speciality, setSpeciality] = useState('');
 
     const [caregivers, setCaregivers] = useState<Caregiver[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     const cities = ['Dhaka', 'Chattogram', 'Khulna', 'Rajshahi', 'Sylhet', 'Mymensingh', 'Rangpur', 'Cumilla', 'Barishal', 'Narayanganj', 'Gazipur'];
-    const specialtiesOptions = ['Elderly Care', 'Palliative Care', 'Post-Surgery Care', 'Child Care', 'Special Needs Care', '1-2 Years', '3-5 Years', '5+ Years'];
+    const specialityOptions = ['General Care', 'Old-age Care', 'Paralysis', 'Accident Patient', 'Other'];
 
     const fetchCaregivers = async (e?: React.FormEvent) => {
         if (e) e.preventDefault();
@@ -40,13 +42,13 @@ export default function SearchCaregiverPage() {
             const params = new URLSearchParams();
             if (location) params.append('location', location);
             if (sex) params.append('sex', sex);
-            if (specialty) params.append('specialty', specialty);
+            if (speciality) params.append('speciality', speciality);
 
             const res = await fetch(`/api/patient/SearchCaregiver?${params.toString()}`);
             const data = await res.json();
 
             if (!res.ok) throw new Error(data.error || 'Failed to fetch caregivers');
-            setCaregivers(data.caregivers || []);
+            setCaregivers(data.data || []);
         } catch (err: any) {
             setError(err.message || 'An error occurred while fetching caregivers');
         } finally {
@@ -54,15 +56,12 @@ export default function SearchCaregiverPage() {
         }
     };
 
-    useEffect(() => {
-        fetchCaregivers();
-    }, []);
 
     return (
         <main className="min-h-screen bg-gray-50 p-6 max-w-6xl mx-auto">
             <div className="mb-6">
                 <h1 className="text-2xl font-bold text-gray-900">Search Caregivers</h1>
-                <p className="text-sm text-gray-600">Find caregivers by selecting location, gender, or area of expertise.</p>
+                <p className="text-sm text-gray-600">Find caregivers by selecting location, gender, or specialty area.</p>
             </div>
 
             <form onSubmit={fetchCaregivers} className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm grid grid-cols-1 sm:grid-cols-4 gap-3 mb-6">
@@ -89,12 +88,12 @@ export default function SearchCaregiverPage() {
                 </select>
 
                 <select
-                    value={specialty}
-                    onChange={(e) => setSpecialty(e.target.value)}
+                    value={speciality}
+                    onChange={(e) => setSpeciality(e.target.value)}
                     className="w-full border border-gray-300 rounded-lg p-2.5 bg-white text-sm outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                    <option value="">All Specialties / Experience</option>
-                    {specialtiesOptions.map((opt) => (
+                    <option value="">All Specialties</option>
+                    {specialityOptions.map((opt) => (
                         <option key={opt} value={opt}>{opt}</option>
                     ))}
                 </select>
@@ -127,15 +126,25 @@ export default function SearchCaregiverPage() {
                             <div>
                                 <div className="flex items-center justify-between mb-2">
                                     <h2 className="font-semibold text-lg text-gray-900">{cg.name}</h2>
-                                    <span className="text-xs bg-gray-100 text-gray-700 font-medium px-2 py-0.5 rounded">
-                                        {cg.sex}, {cg.age} yrs
-                                    </span>
+                                    {typeof cg.matchPercentage === 'number' && (
+                                        <span className={`text-xs font-semibold px-2 py-1 rounded-md ${
+                                            cg.matchPercentage === 100
+                                                ? 'bg-green-100 text-green-800'
+                                                : cg.matchPercentage >= 60
+                                                ? 'bg-blue-100 text-blue-800'
+                                                : 'bg-yellow-100 text-yellow-800'
+                                        }`}>
+                                            {cg.matchPercentage}% Match
+                                        </span>
+                                    )}
                                 </div>
 
                                 <div className="space-y-1.5 text-sm text-gray-600 mb-4">
+                                    <p><span className="font-medium text-gray-800">Gender & Age:</span> {cg.sex}, {cg.age} yrs</p>
                                     <p><span className="font-medium text-gray-800">Location:</span> {cg.location}</p>
+                                    <p><span className="font-medium text-gray-800">Specialty:</span> {cg.speciality?.join(', ') || 'N/A'}</p>
                                     <p><span className="font-medium text-gray-800">Experience:</span> {cg.experience}</p>
-                                    <p><span className="font-medium text-gray-800">Expected Salary:</span> ${cg.expectedSalary}</p>
+                                    <p><span className="font-medium text-gray-800">Expected Salary:</span> {cg.expectedSalary} BDT</p>
                                 </div>
                             </div>
 
