@@ -13,6 +13,7 @@ export async function POST(request: Request) {
             email,
             location,
             expectedSalary,
+            speciality,
             experience,
             sex,
             age,
@@ -20,7 +21,7 @@ export async function POST(request: Request) {
             password,
         } = body;
 
-        if (!name || !phoneNumber || !location || !expectedSalary || !experience || !sex || !age || !nationalIdPassportNo || !password) {
+        if (!name || !phoneNumber || !location || !expectedSalary || !speciality || !experience || !sex || !age || !nationalIdPassportNo || !password) {
             return NextResponse.json(
                 { error: 'Missing required fields' },
                 { status: 400 }
@@ -46,6 +47,7 @@ export async function POST(request: Request) {
             email,
             location,
             expectedSalary,
+            speciality,
             experience,
             sex,
             age,

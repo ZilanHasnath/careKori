@@ -130,7 +130,7 @@ export default function CaregiverDetailPage() {
 
     return (
         <main className="min-h-screen bg-gray-50 p-6 max-w-3xl mx-auto">
-            <Link href="/patient/SearchCaregiver" className="text-sm text-blue-600 hover:underline mb-6 inline-block">
+            <Link href="/patient/searchCaregiver" className="text-sm text-blue-600 hover:underline mb-6 inline-block">
                 &larr; Back to Search
             </Link>
 

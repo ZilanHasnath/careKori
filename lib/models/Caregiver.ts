@@ -10,6 +10,7 @@ export interface ICaregiver extends Document {
     sex: 'Male' | 'Female' | 'Other';
     age: number;
     nationalIdPassportNo: string;
+    speciality: ('Paralysis' | 'accident patient' | 'general care' | 'old-age' | string)[];
     password?: string;
     accountType: 'Pending' | 'Approved';
     createdAt: Date;
@@ -44,6 +45,11 @@ const CaregiverSchema: Schema<ICaregiver> = new Schema(
             type: Number,
             required: true,
             min: 0,
+        },
+        speciality: {
+            type: [String],
+            required: true,
+            default: [], 
         },
         experience: {
             type: String,

@@ -14,6 +14,7 @@ export default function RegisterCaregiverPage() {
         phoneNumber: '',
         email: '',
         location: 'Dhaka',
+        speciality: 'General Care',
         expectedSalary: '',
         experience: '',
         sex: 'Male',
@@ -23,6 +24,7 @@ export default function RegisterCaregiverPage() {
     });
 
     const cities = ['Dhaka', 'Chattogram', 'Khulna', 'Rajshahi', 'Sylhet', 'Mymensingh', 'Rangpur', 'Cumilla', 'Barishal', 'Narayanganj', 'Gazipur'];
+    const specialityOptions = ['General Care', 'Old-age Care', 'Paralysis', 'Accident Patient', 'Other'];
     const experienceOptions = ['1-2 Years', '3-5 Years', '5+ Years'];
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -36,6 +38,7 @@ export default function RegisterCaregiverPage() {
 
         const payload = {
             ...formData,
+            speciality: [formData.speciality],
             expectedSalary: parseInt(formData.expectedSalary),
             age: parseInt(formData.age),
         };
@@ -85,6 +88,11 @@ export default function RegisterCaregiverPage() {
                     <select name="location" onChange={handleChange} className="w-full border p-2.5 rounded-lg bg-white outline-none focus:ring-2 focus:ring-blue-500">
                         {cities.map(city => <option key={city} value={city}>{city}</option>)}
                     </select>
+
+                    <select name="illness" onChange={handleChange} className="w-full border p-2.5 rounded-lg bg-white outline-none focus:ring-2 focus:ring-blue-500">
+                        {specialityOptions.map(option => <option key={option} value={option}>{option}</option>)}
+                    </select>
+
                     <select name="experience" onChange={handleChange} className="w-full border p-2.5 rounded-lg bg-white outline-none focus:ring-2 focus:ring-blue-500">
                         {experienceOptions.map(exp => <option key={exp} value={exp}>{exp}</option>)}
                     </select>
