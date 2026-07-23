@@ -10,6 +10,13 @@
 
 ---
 
+## 🔗 Quick Links
+
+* **Live Application:** [carekori.vercel.app](https://carekori.vercel.app/)
+* **GitHub Repository:** [ZilanHasnath/careKori](https://www.google.com/search?q=https://github.com/ZilanHasnath/careKori)
+
+---
+
 ## ✨ Core Features
 
 | Portal / Module | Key Capabilities |
@@ -73,7 +80,7 @@ npm run dev
 
 ```
 
-> *Open [http://localhost:3000](http://localhost:3000) in your browser to view the application.*
+> *Open [http://localhost:3000](http://localhost:3000) in your browser to view the application locally.*
 
 ```bash
 # Build for production
