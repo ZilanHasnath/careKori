@@ -53,13 +53,17 @@ npm run dev
 # Build for production
 npm run build
 
-## Author
-Zilan Hasnath Lithon
-Computer Science & Engineering Graduate, Bangladesh University
-Full-Stack Web Developer (4+ years experience)
+## 👨‍💻 About the Author
 
-GitHub: github.com/ZilanHasnath
+**Zilan Hasnath Lithon** - *Computer Science & Engineering Graduate from Bangladesh University*
 
-LinkedIn: linkedin.com/in/zilanhasnath
+I am a Full-Stack Web Developer with 4+ years of core development experience. My passion lies in constructing highly performant, accessible, and scalable web ecosystems using a robust suite of languages and tools:
 
-X: x.com/ZilanHasnath
+- Frontend Ecosystem: React, Next.js, Tailwind CSS, JavaScript, TypeScript
+- Backend & Data Layers: Node.js, Express, MongoDB, MySQL, Mongoose
+- Core Systems & Logic: C++
+
+### Get in Touch!
+- GitHub: https://github.com/ZilanHasnath
+- LinkedIn: https://www.linkedin.com/in/zilanhasnath/
+- Twitter/X: https://x.com/ZilanHasnath
