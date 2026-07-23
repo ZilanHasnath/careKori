@@ -2,6 +2,20 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import {
+    Plus,
+    Loader2,
+    Calendar,
+    MapPin,
+    Phone,
+    ArrowRight,
+    UserX,
+    Clock,
+    CheckCircle2,
+    XCircle,
+    CheckCheck,
+    FileText
+} from 'lucide-react';
 
 interface CaregiverInfo {
     _id: string;
@@ -65,86 +79,134 @@ export default function MyRequestsPage() {
     const getStatusBadge = (status: JobRequest['status']) => {
         switch (status) {
             case 'Active':
-                return 'bg-green-100 text-green-800 border-green-200';
+                return {
+                    badge: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+                    icon: <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
+                };
             case 'pending':
-                return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+                return {
+                    badge: 'bg-amber-50 text-amber-700 border-amber-200',
+                    icon: <Clock className="h-3.5 w-3.5 text-amber-600" />
+                };
             case 'Rejected':
-                return 'bg-red-100 text-red-800 border-red-200';
+                return {
+                    badge: 'bg-rose-50 text-rose-700 border-rose-200',
+                    icon: <XCircle className="h-3.5 w-3.5 text-rose-600" />
+                };
             case 'Finish':
-                return 'bg-blue-100 text-blue-800 border-blue-200';
+                return {
+                    badge: 'bg-blue-50 text-blue-700 border-blue-200',
+                    icon: <CheckCheck className="h-3.5 w-3.5 text-blue-600" />
+                };
             default:
-                return 'bg-gray-100 text-gray-800 border-gray-200';
+                return {
+                    badge: 'bg-slate-100 text-slate-700 border-slate-200',
+                    icon: <Clock className="h-3.5 w-3.5 text-slate-500" />
+                };
         }
     };
 
     return (
-        <main className="min-h-screen bg-gray-50 p-6 max-w-5xl mx-auto">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                <div>
-                    <h1 className="text-2xl font-bold text-gray-900">My Job Requests</h1>
-                    <p className="text-sm text-gray-600">Track all your caregiver requests and booking statuses.</p>
+        <main className="min-h-screen bg-slate-50/50 py-10 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+                <div className="space-y-1">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 text-amber-700 text-xs font-semibold uppercase tracking-wider">
+                        <FileText className="h-3.5 w-3.5 text-amber-600" />
+                        Booking History
+                    </div>
+                    <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">My Job Requests</h1>
+                    <p className="text-sm text-slate-600">Track all your caregiver requests and booking statuses.</p>
                 </div>
                 <Link
                     href="/patient/searchCaregiver"
-                    className="self-start sm:self-auto bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm px-4 py-2 rounded-lg transition"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold text-sm py-2.5 px-4 shadow-md transition-all active:scale-[0.98] self-start sm:self-auto"
                 >
-                    + Find New Caregiver
+                    <Plus className="h-4 w-4" />
+                    <span>Find New Caregiver</span>
                 </Link>
             </div>
 
             {error && (
-                <div className="bg-red-50 text-red-700 text-sm p-4 rounded-lg mb-6 border border-red-200">
+                <div className="mb-8 rounded-xl border border-red-200 bg-red-50 p-4 text-sm font-medium text-red-700">
                     {error}
                 </div>
             )}
 
             {loading ? (
-                <div className="text-center py-12 text-gray-500 text-sm">Loading your requests...</div>
+                <div className="flex flex-col items-center justify-center py-20 text-slate-400">
+                    <Loader2 className="h-8 w-8 animate-spin text-amber-500 mb-3" />
+                    <p className="text-sm font-medium text-slate-600">Loading your requests...</p>
+                </div>
             ) : requests.length === 0 ? (
-                <div className="bg-white border border-gray-200 rounded-xl p-8 text-center text-gray-500 text-sm">
-                    No job requests submitted yet.
+                <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-12 text-center shadow-sm">
+                    <FileText className="mx-auto h-10 w-10 text-slate-300 mb-3" />
+                    <h3 className="text-base font-semibold text-slate-900 mb-1">No job requests submitted yet</h3>
+                    <p className="text-sm text-slate-500 mb-6">When you request a caregiver, your booking requests will appear here.</p>
+                    <Link
+                        href="/patient/searchCaregiver"
+                        className="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm py-2.5 px-5 transition-all active:scale-[0.98]"
+                    >
+                        <span>Browse Caregivers</span>
+                        <ArrowRight className="h-4 w-4" />
+                    </Link>
                 </div>
             ) : (
                 <div className="space-y-4">
-                    {requests.map((req) => (
-                        <div
-                            key={req._id}
-                            className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition flex flex-col sm:flex-row sm:items-center justify-between gap-4"
-                        >
-                            <div className="space-y-1 text-sm">
-                                <div className="flex items-center gap-3">
-                                    <h2 className="font-semibold text-gray-900 text-base">
-                                        {req.caregiverId?.name || 'Caregiver Unavailable'}
-                                    </h2>
-                                    <h1>Job Request Status: </h1>
-                                    <span className={`text-xs px-2.5 py-0.5 rounded-full border font-medium uppercase ${getStatusBadge(req.status)}`}>
-                                        {req.status}
-                                    </span>
+                    {requests.map((req) => {
+                        const statusDetails = getStatusBadge(req.status);
+                        return (
+                            <div
+                                key={req._id}
+                                className="group rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm hover:shadow-xl hover:border-slate-300 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-6"
+                            >
+                                <div className="space-y-3">
+                                    <div className="flex items-center gap-3 flex-wrap">
+                                        <h2 className="font-bold text-slate-900 text-lg group-hover:text-amber-600 transition-colors">
+                                            {req.caregiverId?.name || 'Caregiver Unavailable'}
+                                        </h2>
+                                        <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-bold uppercase tracking-wide ${statusDetails.badge}`}>
+                                            {statusDetails.icon}
+                                            <span>{req.status}</span>
+                                        </div>
+                                    </div>
 
+                                    {req.caregiverId ? (
+                                        <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs sm:text-sm text-slate-600">
+                                            <div className="flex items-center gap-1.5">
+                                                <Phone className="h-3.5 w-3.5 text-slate-400" />
+                                                <span>{req.caregiverId.phoneNumber}</span>
+                                            </div>
+                                            <span className="text-slate-300 hidden sm:inline">&bull;</span>
+                                            <div className="flex items-center gap-1.5">
+                                                <MapPin className="h-3.5 w-3.5 text-slate-400" />
+                                                <span>{req.caregiverId.location}</span>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="flex items-center gap-1.5 text-xs text-slate-400 font-medium">
+                                            <UserX className="h-3.5 w-3.5" />
+                                            <span>Caregiver profile is no longer available</span>
+                                        </div>
+                                    )}
+
+                                    <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium pt-1">
+                                        <Calendar className="h-3.5 w-3.5 text-slate-400" />
+                                        <span>Requested: {new Date(req.dateTime).toLocaleString()}</span>
+                                    </div>
                                 </div>
 
                                 {req.caregiverId && (
-                                    <p className="text-gray-600">
-                                        <span className="font-medium text-gray-800">Phone:</span> {req.caregiverId.phoneNumber} &bull;{' '}
-                                        <span className="font-medium text-gray-800">Location:</span> {req.caregiverId.location}
-                                    </p>
+                                    <Link
+                                        href={`/patient/caregiver/${req.caregiverId._id}`}
+                                        className="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-100 hover:bg-slate-900 hover:text-white text-slate-800 font-semibold text-xs sm:text-sm py-2.5 px-4 transition-all active:scale-[0.98] shrink-0 self-start sm:self-auto"
+                                    >
+                                        <span>View Profile</span>
+                                        <ArrowRight className="h-4 w-4" />
+                                    </Link>
                                 )}
-
-                                <p className="text-gray-500 text-xs mt-1">
-                                    Requested Date & Time: {new Date(req.dateTime).toLocaleString()}
-                                </p>
                             </div>
-
-                            {req.caregiverId && (
-                                <Link
-                                    href={`/patient/caregiver/${req.caregiverId._id}`}
-                                    className="text-xs text-blue-600 hover:underline font-medium self-start sm:self-auto"
-                                >
-                                    View Profile &rarr;
-                                </Link>
-                            )}
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
             )}
         </main>
