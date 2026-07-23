@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# careKori — Caregiver Hiring & Patient Progress Platform
 
-## Getting Started
+[Live Demo](https://carekori.vercel.app) | [GitHub Repository](https://github.com/ZilanHasnath/careKori.git)
 
-First, run the development server:
+**careKori** is a full-stack, role-based platform that connects patients, caregivers, and family members. Patients can hire caregivers, caregivers log daily progress updates, family members track patient care using a unique identifier, and administrators manage platform operations.
 
-```bash
+---
+
+## Key Features
+
+* **Patient Portal:** Search caregivers, send hiring requests, link family members, and view daily health updates.
+* **Caregiver Portal:** Manage incoming job requests, view patient history, and submit daily progress logs.
+* **Family Member Portal:** Link to a patient using a unique ID to view real-time progress reports.
+* **Admin Dashboard:** Oversee user profiles, monitor job statuses, and manage system administrators.
+
+---
+
+## Application Structure
+
+Built with **Next.js 16 (App Router)** and **TypeScript**, organized into role-based routes and internal API handlers:
+
+```text
+app/
+├── admin/          -> System oversight, admin management, profiles
+├── auth/           -> Login & multi-role registration flows
+├── caregiver/      -> Job requests, active roster, progress logging
+├── familymember/   -> Patient linking and health monitoring
+└── patient/        -> Caregiver search, request management, progress tracking
+
+api/
+├── admin/          -> Administrative actions and data access
+├── auth/           -> Authentication handlers
+├── caregiver/      -> Job acceptance, history, and log updates
+├── family/         -> Patient verification and log retrieval
+└── patient/        -> Search filters, booking requests, and profiles
+
+Tech Stack
+Frontend & Framework: Next.js 16 (Turbopack), React, Tailwind CSS, TypeScript
+
+Deployment: Vercel
+
+Local Setup
+# Clone repository
+git clone [https://github.com/ZilanHasnath/careKori.git](https://github.com/ZilanHasnath/careKori.git)
+cd careKori
+
+# Install dependencies
+npm install
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# Build for production
+npm run build
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Author
+Zilan Hasnath Lithon
+Computer Science & Engineering Graduate, Bangladesh University
+Full-Stack Web Developer (4+ years experience)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+GitHub: github.com/ZilanHasnath
 
-## Learn More
+LinkedIn: linkedin.com/in/zilanhasnath
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+X: x.com/ZilanHasnath
