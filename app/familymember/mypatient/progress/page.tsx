@@ -270,9 +270,9 @@ function ProgressContent() {
                                 const dateStr = log.dateTime || log.createdAt;
                                 const formattedDate = dateStr
                                     ? new Date(dateStr).toLocaleString('en-US', {
-                                        dateStyle: 'medium',
-                                        timeStyle: 'short',
-                                    })
+                                          dateStyle: 'medium',
+                                          timeStyle: 'short',
+                                      })
                                     : 'N/A';
 
                                 return (

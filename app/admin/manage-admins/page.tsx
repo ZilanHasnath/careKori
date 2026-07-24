@@ -55,67 +55,140 @@ export default function ManageAdminsPage() {
         }
     }
 
+    const getRoleBadge = (role: string) => {
+        switch (role) {
+            case 'SuperAdmin':
+                return 'bg-purple-50 text-purple-700 border-purple-200/60';
+            case 'Manager':
+                return 'bg-amber-50 text-amber-700 border-amber-200/60';
+            default:
+                return 'bg-indigo-50 text-indigo-700 border-indigo-200/60';
+        }
+    };
+
     return (
-        <div className="p-6 max-w-6xl mx-auto space-y-6">
-            <div className="flex justify-between items-center">
-                <h1 className="text-2xl font-bold">Admin Management</h1>
+        <div className="w-full max-w-6xl mx-auto space-y-4 sm:space-y-6 p-4 sm:p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200">
+                <div>
+                    <h1 className="text-xl sm:text-2xl font-bold text-slate-900">Admin Management</h1>
+                    <p className="text-xs text-slate-500 mt-0.5 sm:mt-1">
+                        View, manage, and provision administrative user accounts.
+                    </p>
+                </div>
                 <Link
                     href="/admin/addnewadmin"
-                    className="px-4 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium"
+                    className="inline-flex items-center justify-center px-4 py-2 text-xs sm:text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-2xs transition-colors shrink-0"
                 >
                     + Add New Admin
                 </Link>
             </div>
 
             {loading ? (
-                <div className="p-6">Loading admins...</div>
-            ) : error ? (
-                <div className="p-6 text-red-500">{error}</div>
-            ) : (
-                <div className="overflow-x-auto border rounded-lg shadow-sm bg-white">
-                    <table className="w-full text-left border-collapse text-sm">
-                        <thead className="bg-gray-100 border-b">
-                            <tr>
-                                <th className="p-3">Name</th>
-                                <th className="p-3">Email</th>
-                                <th className="p-3">Role</th>
-                                <th className="p-3">Created Date</th>
-                                <th className="p-3 text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {admins.map((admin) => (
-                                <tr key={admin._id} className="border-b hover:bg-gray-50">
-                                    <td className="p-3 font-medium">{admin.name}</td>
-                                    <td className="p-3">{admin.email}</td>
-                                    <td className="p-3">
-                                        <span className="text-xs px-2.5 py-1 rounded-full font-medium bg-purple-100 text-purple-800 border border-purple-200">
-                                            {admin.role}
-                                        </span>
-                                    </td>
-                                    <td className="p-3 text-gray-500">
-                                        {new Date(admin.createdAt).toLocaleDateString()}
-                                    </td>
-                                    <td className="p-3 text-right">
-                                        <button
-                                            onClick={() => handleDelete(admin._id)}
-                                            className="text-red-600 hover:underline font-medium text-xs"
-                                        >
-                                            Delete
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                            {admins.length === 0 && (
-                                <tr>
-                                    <td colSpan={5} className="p-4 text-center text-gray-500">
-                                        No admin accounts found.
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
+                <div className="w-full flex justify-center items-center py-16 bg-white rounded-2xl border border-slate-200 shadow-2xs">
+                    <div className="flex items-center gap-3 text-slate-500 font-medium text-sm">
+                        <div className="w-5 h-5 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+                        Loading administrators...
+                    </div>
                 </div>
+            ) : error ? (
+                <div className="p-4 bg-rose-50 border border-rose-200 rounded-2xl text-rose-600 text-sm font-medium">
+                    {error}
+                </div>
+            ) : (
+                <>
+                    <div className="block md:hidden space-y-3">
+                        {admins.map((admin) => (
+                            <div key={admin._id} className="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs space-y-3">
+                                <div className="flex items-start justify-between gap-2 border-b border-slate-100 pb-2.5">
+                                    <div>
+                                        <p className="font-semibold text-slate-900 text-sm">{admin.name}</p>
+                                        <p className="text-xs text-slate-500">{admin.email}</p>
+                                    </div>
+                                    <span
+                                        className={`inline-flex items-center text-[11px] px-2.5 py-0.5 rounded-md font-semibold border shrink-0 ${getRoleBadge(
+                                            admin.role
+                                        )}`}
+                                    >
+                                        {admin.role}
+                                    </span>
+                                </div>
+
+                                <div className="flex items-center justify-between text-xs pt-1">
+                                    <div>
+                                        <span className="text-slate-400">Created: </span>
+                                        <span className="font-medium text-slate-600">
+                                            {new Date(admin.createdAt).toLocaleDateString()}
+                                        </span>
+                                    </div>
+                                    <button
+                                        onClick={() => handleDelete(admin._id)}
+                                        className="px-3 py-1 text-xs font-semibold text-rose-600 hover:text-rose-700 bg-rose-50/60 hover:bg-rose-50 rounded-lg transition-colors"
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                        {admins.length === 0 && (
+                            <div className="p-8 text-center bg-white rounded-2xl border border-slate-200 text-slate-400 font-medium text-xs">
+                                No admin accounts found.
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="hidden md:block bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden">
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left border-collapse text-xs">
+                                <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold uppercase tracking-wider">
+                                    <tr>
+                                        <th className="py-3.5 px-4">Name</th>
+                                        <th className="py-3.5 px-4">Email</th>
+                                        <th className="py-3.5 px-4">Role</th>
+                                        <th className="py-3.5 px-4">Created Date</th>
+                                        <th className="py-3.5 px-4 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-slate-100 text-slate-700">
+                                    {admins.map((admin) => (
+                                        <tr key={admin._id} className="hover:bg-slate-50/60 transition-colors">
+                                            <td className="py-3.5 px-4 font-semibold text-slate-900">{admin.name}</td>
+                                            <td className="py-3.5 px-4 text-slate-600">{admin.email}</td>
+                                            <td className="py-3.5 px-4">
+                                                <span
+                                                    className={`inline-flex items-center text-[11px] px-2.5 py-0.5 rounded-md font-semibold border ${getRoleBadge(
+                                                        admin.role
+                                                    )}`}
+                                                >
+                                                    {admin.role}
+                                                </span>
+                                            </td>
+                                            <td className="py-3.5 px-4 text-slate-500 whitespace-nowrap">
+                                                {new Date(admin.createdAt).toLocaleDateString(undefined, {
+                                                    dateStyle: 'medium',
+                                                })}
+                                            </td>
+                                            <td className="py-3.5 px-4 text-right">
+                                                <button
+                                                    onClick={() => handleDelete(admin._id)}
+                                                    className="px-2.5 py-1 text-xs font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors"
+                                                >
+                                                    Delete
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                    {admins.length === 0 && (
+                                        <tr>
+                                            <td colSpan={5} className="py-12 text-center text-slate-400 font-medium text-xs">
+                                                No admin accounts found.
+                                            </td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </>
             )}
         </div>
     );

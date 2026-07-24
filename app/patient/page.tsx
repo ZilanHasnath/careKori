@@ -10,12 +10,15 @@ import {
     User,
     ArrowRight,
     ShieldCheck,
-    Loader2
+    Loader2,
+    Copy,
+    Check
 } from 'lucide-react';
 
 export default function PatientDashboard() {
     const [patient, setPatient] = useState<any>(null);
     const [loading, setLoading] = useState(true);
+    const [copied, setCopied] = useState(false);
 
     useEffect(() => {
         const user = localStorage.getItem('user');
@@ -33,109 +36,142 @@ export default function PatientDashboard() {
         }
     }, []);
 
+    const copyToClipboard = (text: string) => {
+        if (!text) return;
+        navigator.clipboard.writeText(text);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
+
     const quickActions = [
         {
             title: 'Find Caregiver',
             description: 'Search & hire certified caregivers nearby.',
             href: '/patient/searchCaregiver',
             icon: Search,
-            color: 'bg-indigo-50 text-indigo-600 border-indigo-100',
+            bg: 'bg-indigo-50/80 hover:bg-indigo-100/80',
+            iconBg: 'bg-indigo-500 text-white',
+            accent: 'text-indigo-600',
         },
         {
             title: 'Job Requests',
             description: 'Track active & pending care requests.',
             href: '/patient/myrequests',
             icon: Clock,
-            color: 'bg-amber-50 text-amber-600 border-amber-100',
+            bg: 'bg-amber-50/80 hover:bg-amber-100/80',
+            iconBg: 'bg-amber-500 text-white',
+            accent: 'text-amber-600',
         },
         {
             title: 'Health Progress',
             description: 'View daily vitals & caregiver reports.',
             href: '/patient/myprogress',
             icon: TrendingUp,
-            color: 'bg-rose-50 text-rose-600 border-rose-100',
+            bg: 'bg-rose-50/80 hover:bg-rose-100/80',
+            iconBg: 'bg-rose-500 text-white',
+            accent: 'text-rose-600',
         },
         {
             title: 'Family Members',
             description: 'Manage linked family accounts.',
             href: '/patient/familymember',
             icon: Users,
-            color: 'bg-emerald-50 text-emerald-600 border-emerald-100',
+            bg: 'bg-emerald-50/80 hover:bg-emerald-100/80',
+            iconBg: 'bg-emerald-500 text-white',
+            accent: 'text-emerald-600',
         },
     ];
 
+    const displayId = patient?.uniqueId || patient?._id || '';
+
     return (
-        <div className="space-y-6 max-w-6xl mx-auto">
-            <div className="bg-gradient-to-r from-indigo-600 to-indigo-800 rounded-2xl p-6 sm:p-8 text-white shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                    <p className="text-xl font-semibold tracking-wider text-indigo-200">
-                        Patient Unique Id
-                        <br />
-                        (Use This To Connect Family Member)
-                    </p>
-                    <h1 className="text-3xl sm:text-5xl font-black tracking-tight mt-1 text-white">
-                        {loading ? (
-                            <span className="inline-flex items-center gap-2 text-2xl font-medium text-indigo-200">
-                                <Loader2 className="w-6 h-6 animate-spin" /> Loading ID...
-                            </span>
-                        ) : (
-                            patient?.uniqueId || patient?._id || 'N/A'
-                        )}
-                    </h1>
-                </div>
-                {patient?.patientName && (
-                    <div className="sm:text-right border-t sm:border-t-0 sm:border-l border-indigo-500/50 pt-3 sm:pt-0 sm:pl-6">
-                        <p className="text-xs text-indigo-200">Logged in as</p>
-                        <p className="text-lg font-bold text-white">{patient.patientName}</p>
+        <div className="space-y-5 sm:space-y-6 max-w-6xl mx-auto px-1 sm:px-0 pb-6">
+            <div className="relative overflow-hidden bg-black rounded-3xl p-6 sm:p-8 text-white shadow-xl shadow-indigo-100">
+                <div className="absolute -right-8 -top-8 w-40 h-40 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+                <div className="absolute right-20 -bottom-10 w-32 h-32 bg-pink-400/20 rounded-full blur-xl pointer-events-none" />
+
+                <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                    <div className="space-y-2">
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md text-xs font-medium text-pink-100 border border-white/20">
+                            <span> Patient Unique ID</span>
+                        </div>
+                        
+                        <div className="flex items-center gap-3 pt-1">
+                            <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white drop-shadow-xs">
+                                {loading ? (
+                                    <span className="inline-flex items-center gap-2 text-xl font-medium text-indigo-100">
+                                        <Loader2 className="w-5 h-5 animate-spin" /> Fetching ID...
+                                    </span>
+                                ) : (
+                                    displayId || 'N/A'
+                                )}
+                            </h1>
+
+                            {!loading && displayId && (
+                                <button
+                                    onClick={() => copyToClipboard(displayId)}
+                                    className="p-2 rounded-xl bg-white/20 hover:bg-white/30 backdrop-blur-md transition-all active:scale-95 text-white"
+                                    title="Copy ID"
+                                >
+                                    {copied ? <Check className="w-4 h-4 text-emerald-300" /> : <Copy className="w-4 h-4" />}
+                                </button>
+                            )}
+                        </div>
+
+                        <p className="text-xs sm:text-sm text-indigo-100/90 font-medium">
+                            Share this ID to link family member accounts.
+                        </p>
                     </div>
-                )}
+
+                    
+                </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 {quickActions.map((action) => {
                     const Icon = action.icon;
                     return (
                         <Link
                             key={action.title}
                             href={action.href}
-                            className="group bg-white border border-slate-200/80 hover:border-indigo-300 p-4 rounded-xl shadow-2xs hover:shadow-xs transition-all flex flex-col justify-between"
+                            className={`group relative p-5 rounded-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-200/50 border border-slate-100 ${action.bg} flex flex-col justify-between`}
                         >
-                            <div className="space-y-2.5">
-                                <div className={`w-9 h-9 rounded-lg flex items-center justify-center border ${action.color}`}>
-                                    <Icon className="w-4 h-4" />
+                            <div className="space-y-3">
+                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-xs ${action.iconBg}`}>
+                                    <Icon className="w-5 h-5" />
                                 </div>
                                 <div>
-                                    <h2 className="font-bold text-slate-900 text-sm group-hover:text-indigo-600 transition-colors">
+                                    <h2 className="font-bold text-slate-800 text-base group-hover:text-slate-900 transition-colors">
                                         {action.title}
                                     </h2>
-                                    <p className="text-xs text-slate-500 mt-0.5">
+                                    <p className="text-xs text-slate-500 mt-1 leading-relaxed">
                                         {action.description}
                                     </p>
                                 </div>
                             </div>
 
-                            <div className="mt-4 pt-2.5 border-t border-slate-100 flex items-center text-xs font-semibold text-indigo-600">
-                                <span>Open</span>
-                                <ArrowRight className="w-3.5 h-3.5 ml-1 group-hover:translate-x-0.5 transition-transform" />
+                            <div className={`mt-5 flex items-center text-xs font-bold ${action.accent}`}>
+                                <span>Explore</span>
+                                <ArrowRight className="w-3.5 h-3.5 ml-1 group-hover:translate-x-1 transition-transform" />
                             </div>
                         </Link>
                     );
                 })}
             </div>
 
-            <div className="bg-white border border-slate-200/80 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
-                        <ShieldCheck className="w-4 h-4" />
+            <div className="bg-gradient-to-r from-slate-900 to-indigo-950 text-white rounded-2xl p-4 sm:p-5 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-3.5">
+                    <div className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md text-pink-400 flex items-center justify-center shrink-0 border border-white/10">
+                        <ShieldCheck className="w-5 h-5" />
                     </div>
                     <div>
-                        <h3 className="text-xs font-bold text-slate-900">Profile Completeness</h3>
-                        <p className="text-xs text-slate-500">Keep medical history and contacts up to date.</p>
+                        <h3 className="text-sm font-bold text-white">Profile Completeness</h3>
+                        <p className="text-xs text-slate-300">Keep medical history and contacts updated for better care.</p>
                     </div>
                 </div>
                 <Link
                     href="/patient/profile"
-                    className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold rounded-lg transition-colors shrink-0"
+                    className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-pink-500 hover:bg-pink-600 active:scale-95 text-white text-xs font-bold rounded-xl transition-all shadow-sm shrink-0"
                 >
                     <User className="w-3.5 h-3.5" />
                     <span>Update Profile</span>

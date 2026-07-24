@@ -2,7 +2,7 @@ export default function AdminDashboard() {
     return (
         <div>
             <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-            <p className="mt-4">Welcome to your dashboard.</p>
+            <p className="mt-4">Control everything from here.</p>
         </div>
     );
 }

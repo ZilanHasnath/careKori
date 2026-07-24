@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import LogoutButton from '@/components/LogoutButton';
 import {
     User,
     Phone,
@@ -214,75 +215,81 @@ export default function CaregiverProfile() {
                             </div>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div className="p-3.5 bg-slate-50/80 border border-slate-100 rounded-xl flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
-                                    <Phone className="w-4 h-4" />
+                        <div className="space-y-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div className="p-3.5 bg-slate-50/80 border border-slate-100 rounded-xl flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+                                        <Phone className="w-4 h-4" />
+                                    </div>
+                                    <div>
+                                        <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">Phone Number</span>
+                                        <span className="text-xs font-bold text-slate-800">{profile?.phoneNumber || 'N/A'}</span>
+                                    </div>
                                 </div>
-                                <div>
-                                    <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">Phone Number</span>
-                                    <span className="text-xs font-bold text-slate-800">{profile?.phoneNumber || 'N/A'}</span>
+
+                                <div className="p-3.5 bg-slate-50/80 border border-slate-100 rounded-xl flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+                                        <Mail className="w-4 h-4" />
+                                    </div>
+                                    <div>
+                                        <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">Email Address</span>
+                                        <span className="text-xs font-bold text-slate-800">{profile?.email || 'N/A'}</span>
+                                    </div>
+                                </div>
+
+                                <div className="p-3.5 bg-slate-50/80 border border-slate-100 rounded-xl flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+                                        <MapPin className="w-4 h-4" />
+                                    </div>
+                                    <div>
+                                        <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">Location</span>
+                                        <span className="text-xs font-bold text-slate-800">{profile?.location || 'N/A'}</span>
+                                    </div>
+                                </div>
+
+                                <div className="p-3.5 bg-slate-50/80 border border-slate-100 rounded-xl flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                                        <DollarSign className="w-4 h-4" />
+                                    </div>
+                                    <div>
+                                        <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">Expected Salary</span>
+                                        <span className="text-xs font-bold text-emerald-700">{profile?.expectedSalary || 'N/A'}</span>
+                                    </div>
+                                </div>
+
+                                <div className="p-3.5 bg-slate-50/80 border border-slate-100 rounded-xl flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+                                        <Briefcase className="w-4 h-4" />
+                                    </div>
+                                    <div>
+                                        <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">Experience</span>
+                                        <span className="text-xs font-bold text-slate-800">{profile?.experience || 'N/A'}</span>
+                                    </div>
+                                </div>
+
+                                <div className="p-3.5 bg-slate-50/80 border border-slate-100 rounded-xl flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+                                        <UserCheck className="w-4 h-4" />
+                                    </div>
+                                    <div>
+                                        <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">Gender</span>
+                                        <span className="text-xs font-bold text-slate-800">{profile?.sex || 'N/A'}</span>
+                                    </div>
+                                </div>
+
+                                <div className="p-3.5 bg-slate-50/80 border border-slate-100 rounded-xl flex items-center gap-3 sm:col-span-2">
+                                    <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+                                        <Calendar className="w-4 h-4" />
+                                    </div>
+                                    <div>
+                                        <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">Age</span>
+                                        <span className="text-xs font-bold text-slate-800">{profile?.age ? `${profile.age} years old` : 'N/A'}</span>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div className="p-3.5 bg-slate-50/80 border border-slate-100 rounded-xl flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
-                                    <Mail className="w-4 h-4" />
-                                </div>
-                                <div>
-                                    <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">Email Address</span>
-                                    <span className="text-xs font-bold text-slate-800">{profile?.email || 'N/A'}</span>
-                                </div>
-                            </div>
-
-                            <div className="p-3.5 bg-slate-50/80 border border-slate-100 rounded-xl flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
-                                    <MapPin className="w-4 h-4" />
-                                </div>
-                                <div>
-                                    <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">Location</span>
-                                    <span className="text-xs font-bold text-slate-800">{profile?.location || 'N/A'}</span>
-                                </div>
-                            </div>
-
-                            <div className="p-3.5 bg-slate-50/80 border border-slate-100 rounded-xl flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-                                    <DollarSign className="w-4 h-4" />
-                                </div>
-                                <div>
-                                    <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">Expected Salary</span>
-                                    <span className="text-xs font-bold text-emerald-700">{profile?.expectedSalary || 'N/A'}</span>
-                                </div>
-                            </div>
-
-                            <div className="p-3.5 bg-slate-50/80 border border-slate-100 rounded-xl flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
-                                    <Briefcase className="w-4 h-4" />
-                                </div>
-                                <div>
-                                    <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">Experience</span>
-                                    <span className="text-xs font-bold text-slate-800">{profile?.experience || 'N/A'}</span>
-                                </div>
-                            </div>
-
-                            <div className="p-3.5 bg-slate-50/80 border border-slate-100 rounded-xl flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
-                                    <UserCheck className="w-4 h-4" />
-                                </div>
-                                <div>
-                                    <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">Gender</span>
-                                    <span className="text-xs font-bold text-slate-800">{profile?.sex || 'N/A'}</span>
-                                </div>
-                            </div>
-
-                            <div className="p-3.5 bg-slate-50/80 border border-slate-100 rounded-xl flex items-center gap-3 sm:col-span-2">
-                                <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
-                                    <Calendar className="w-4 h-4" />
-                                </div>
-                                <div>
-                                    <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">Age</span>
-                                    <span className="text-xs font-bold text-slate-800">{profile?.age ? `${profile.age} years old` : 'N/A'}</span>
-                                </div>
+                            <div className="pt-4 border-t border-slate-100">
+                                <LogoutButton />
                             </div>
                         </div>
                     )}

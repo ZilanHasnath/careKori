@@ -1,11 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 
 export default function LogoutButton() {
     const [loading, setLoading] = useState(false);
-    const router = useRouter();
 
     const handleLogout = async () => {
         setLoading(true);
@@ -25,9 +23,7 @@ export default function LogoutButton() {
                 console.warn('Could not clear localStorage:', e);
             }
 
-            router.push('/auth/login');
-            router.refresh();
-            setLoading(false);
+            window.location.href = '/auth/login';
         }
     };
 

@@ -1,14 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Mail, Lock, ArrowRight, Loader2 } from 'lucide-react';
 
 export default function LoginPage() {
     const [formData, setFormData] = useState({ identifier: '', password: '' });
     const [loading, setLoading] = useState(false);
-    const router = useRouter();
 
     const setSafeLocalStorage = (key: string, value: string) => {
         try {
@@ -36,22 +34,25 @@ export default function LoginPage() {
                 setSafeLocalStorage('user', JSON.stringify(data.user));
                 setSafeLocalStorage('role', data.role);
 
+                let targetPath = '/';
                 if (data.role === 'patient') {
-                    router.push('/patient/');
+                    targetPath = '/patient/';
                 } else if (data.role === 'caregiver') {
-                    router.push('/caregiver/');
+                    targetPath = '/caregiver/';
                 } else if (data.role === 'family') {
-                    router.push('/familymember/');
+                    targetPath = '/familymember/';
                 } else if (data.role === 'admin' || data.role === 'superadmin') {
-                    router.push('/admin/');
+                    targetPath = '/admin/';
                 }
+
+                window.location.href = targetPath;
             } else {
                 alert(data.error || 'Login failed');
+                setLoading(false);
             }
         } catch (err) {
             console.error('Login error:', err);
             alert('A network error occurred. Please try again.');
-        } finally {
             setLoading(false);
         }
     };
