@@ -13,6 +13,8 @@ export interface ICaregiver extends Document {
     speciality: ('Paralysis' | 'accident patient' | 'general care' | 'old-age' | string)[];
     password?: string;
     accountType: 'Pending' | 'Approved';
+    resetToken?: string;
+    resetTokenExp?: Date;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -49,7 +51,7 @@ const CaregiverSchema: Schema<ICaregiver> = new Schema(
         speciality: {
             type: [String],
             required: true,
-            default: [], 
+            default: [],
         },
         experience: {
             type: String,
@@ -81,6 +83,14 @@ const CaregiverSchema: Schema<ICaregiver> = new Schema(
             enum: ['Pending', 'Approved'],
             required: true,
             default: 'Pending',
+        },
+        resetToken: {
+            type: String,
+            default: null,
+        },
+        resetTokenExp: {
+            type: Date,
+            default: null,
         },
     },
     {

@@ -7,6 +7,8 @@ export interface IFamilyMember extends Document {
     password?: string;
     location: string;
     linkedPatient: mongoose.Types.ObjectId[];
+    resetToken?: string;
+    resetTokenExp?: Date;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -45,6 +47,14 @@ const FamilyMemberSchema: Schema<IFamilyMember> = new Schema(
                 ref: 'Patient',
             },
         ],
+        resetToken: {
+            type: String,
+            default: null,
+        },
+        resetTokenExp: {
+            type: Date,
+            default: null,
+        },
     },
     {
         timestamps: true,

@@ -10,11 +10,12 @@ export interface IPatient extends Document {
     sex: 'Male' | 'Female' | 'Other';
     location: string;
     illness: ('Paralysis' | 'accident patient' | 'general care' | 'old-age' | string)[];
-    linkedFamilyMembers: mongoose.Types.ObjectId[]; 
+    linkedFamilyMembers: mongoose.Types.ObjectId[];
+    resetToken?: string;
+    resetTokenExp?: Date;
     createdAt: Date;
     updatedAt: Date;
 }
-
 
 const PatientSchema: Schema<IPatient> = new Schema(
     {
@@ -63,7 +64,7 @@ const PatientSchema: Schema<IPatient> = new Schema(
         illness: {
             type: [String],
             required: true,
-            default: [], 
+            default: [],
         },
         linkedFamilyMembers: [
             {
@@ -71,12 +72,19 @@ const PatientSchema: Schema<IPatient> = new Schema(
                 ref: 'FamilyMember',
             },
         ],
+        resetToken: {
+            type: String,
+            default: null,
+        },
+        resetTokenExp: {
+            type: Date,
+            default: null,
+        },
     },
     {
-        timestamps: true, 
+        timestamps: true,
     }
 );
-
 
 const Patient: Model<IPatient> =
     mongoose.models.Patient || mongoose.model<IPatient>('Patient', PatientSchema);
