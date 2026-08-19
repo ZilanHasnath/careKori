@@ -188,13 +188,13 @@ export default function Home() {
                 <div className="mt-6 sm:mt-8 flex flex-col gap-2.5 sm:gap-3">
                   <Link
                     href={portal.loginUrl}
-                    className="flex w-full items-center justify-center gap-2 rounded-2xl bg-slate-900 py-3 text-sm font-semibold text-white transition-all hover:bg-amber-500 hover:text-amber-950 active:scale-95"
+                    className="flex w-full items-center justify-center gap-2 rounded-2xl bg-amber-500 py-3 text-sm font-semibold text-amber-950 transition-all hover:bg-amber-400 active:scale-95 shadow-sm"
                   >
                     Login
                   </Link>
                   <Link
                     href={portal.registerUrl}
-                    className="flex w-full items-center justify-center rounded-2xl border border-slate-200 bg-transparent py-3 text-sm font-semibold text-slate-700 transition-all hover:border-amber-400 hover:bg-amber-50 active:scale-95"
+                    className="flex w-full items-center justify-center rounded-2xl border border-amber-300 bg-amber-50/50 py-3 text-sm font-semibold text-amber-900 transition-all hover:bg-amber-100 hover:border-amber-400 active:scale-95"
                   >
                     Create Account
                   </Link>
