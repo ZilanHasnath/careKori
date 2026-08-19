@@ -175,10 +175,10 @@ export default function Home() {
             return (
               <div
                 key={portal.title}
-                className="group flex flex-col justify-between rounded-3xl border border-amber-100 bg-white/80 p-6 sm:p-8 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-xl backdrop-blur-xs"
+                className="group flex flex-col justify-between rounded-3xl border border-blue-100 bg-white/80 p-6 sm:p-8 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-xl backdrop-blur-xs"
               >
                 <div>
-                  <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-2xl bg-amber-100 text-amber-700 transition-colors group-hover:bg-amber-400 group-hover:text-amber-950">
+                  <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-2xl bg-blue-100 text-blue-700 transition-colors group-hover:bg-blue-600 group-hover:text-white">
                     <Icon className="h-6 w-6 sm:h-7 sm:w-7" />
                   </div>
                   <h3 className="mt-5 sm:mt-6 text-lg sm:text-xl font-bold text-slate-900">{portal.title}</h3>
@@ -188,13 +188,13 @@ export default function Home() {
                 <div className="mt-6 sm:mt-8 flex flex-col gap-2.5 sm:gap-3">
                   <Link
                     href={portal.loginUrl}
-                    className="flex w-full items-center justify-center gap-2 rounded-2xl bg-amber-500 py-3 text-sm font-semibold text-amber-950 transition-all hover:bg-amber-400 active:scale-95 shadow-sm"
+                    className="flex w-full items-center justify-center gap-2 rounded-2xl bg-blue-600 py-3 text-sm font-semibold text-white transition-all hover:bg-blue-500 active:scale-95 shadow-sm"
                   >
                     Login
                   </Link>
                   <Link
                     href={portal.registerUrl}
-                    className="flex w-full items-center justify-center rounded-2xl border border-amber-300 bg-amber-50/50 py-3 text-sm font-semibold text-amber-900 transition-all hover:bg-amber-100 hover:border-amber-400 active:scale-95"
+                    className="flex w-full items-center justify-center rounded-2xl border border-blue-200 bg-blue-50/50 py-3 text-sm font-semibold text-blue-900 transition-all hover:bg-blue-100 hover:border-blue-300 active:scale-95"
                   >
                     Create Account
                   </Link>
