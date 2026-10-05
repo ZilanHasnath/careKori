@@ -3,6 +3,9 @@ import bcrypt from 'bcryptjs';
 import dbConnect from '@/lib/db';
 import Caregiver from '@/lib/models/Caregiver';
 
+const BD_PHONE_REGEX = /^(?:\+8801|8801|01)[3-9]\d{8}$/;
+const EMAIL_REGEX = /^[a-zA-Z0-9](?:[a-zA-Z0-9._%+-]*[a-zA-Z0-9])?@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/;
+
 export async function POST(request: Request) {
     try {
         await dbConnect();
@@ -28,13 +31,47 @@ export async function POST(request: Request) {
             );
         }
 
-        const existingCaregiver = await Caregiver.findOne({
-            $or: [{ phoneNumber }, { nationalIdPassportNo }],
-        });
+        const trimmedPhone = phoneNumber.toString().trim();
+        if (!BD_PHONE_REGEX.test(trimmedPhone)) {
+            return NextResponse.json(
+                { error: 'Invalid Bangladeshi phone number' },
+                { status: 400 }
+            );
+        }
+
+        const trimmedEmail = email ? email.toString().trim().toLowerCase() : null;
+        if (trimmedEmail && !EMAIL_REGEX.test(trimmedEmail)) {
+            return NextResponse.json(
+                { error: 'Invalid email address format' },
+                { status: 400 }
+            );
+        }
+
+        const trimmedDocNo = nationalIdPassportNo.toString().trim();
+
+        const conflictQuery: any[] = [
+            { phoneNumber: trimmedPhone },
+            { nationalIdPassportNo: trimmedDocNo },
+        ];
+
+        if (trimmedEmail) {
+            conflictQuery.push({ email: trimmedEmail });
+        }
+
+        const existingCaregiver = await Caregiver.findOne({ $or: conflictQuery });
 
         if (existingCaregiver) {
+            let conflictField = 'record';
+            if (existingCaregiver.phoneNumber === trimmedPhone) {
+                conflictField = 'phone number';
+            } else if (existingCaregiver.nationalIdPassportNo === trimmedDocNo) {
+                conflictField = 'identification document';
+            } else if (existingCaregiver.email === trimmedEmail) {
+                conflictField = 'email';
+            }
+
             return NextResponse.json(
-                { error: 'Caregiver with this phone number or identification document already exists' },
+                { error: `Caregiver with this ${conflictField} already exists` },
                 { status: 409 }
             );
         }
@@ -43,15 +80,15 @@ export async function POST(request: Request) {
 
         const newCaregiver = await Caregiver.create({
             name,
-            phoneNumber,
-            email,
+            phoneNumber: trimmedPhone,
+            email: trimmedEmail,
             location,
             expectedSalary,
             speciality,
             experience,
             sex,
             age,
-            nationalIdPassportNo,
+            nationalIdPassportNo: trimmedDocNo,
             password: hashedPassword,
             accountType: 'Pending',
         });

@@ -5,6 +5,9 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { User, Phone, Mail, Lock, Calendar, HeartPulse, MapPin, Loader2, ArrowRight } from 'lucide-react';
 
+const BD_PHONE_REGEX = /^(?:\+8801|8801|01)[3-9]\d{8}$/;
+const EMAIL_REGEX = /^[a-zA-Z0-9](?:[a-zA-Z0-9._%+-]*[a-zA-Z0-9])?@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/;
+
 export default function RegisterPatientPage() {
     const router = useRouter();
     const [formData, setFormData] = useState({
@@ -29,13 +32,26 @@ export default function RegisterPatientPage() {
 
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
-        setLoading(true);
         setError(null);
 
+        const trimmedPhone = formData.phoneNumber.trim();
+        if (!BD_PHONE_REGEX.test(trimmedPhone)) {
+            setError('Please enter a valid Bangladeshi phone number (e.g., 017XXXXXXXX or +88017XXXXXXXX)');
+            return;
+        }
+
+        const trimmedEmail = formData.email.trim();
+        if (trimmedEmail && !EMAIL_REGEX.test(trimmedEmail)) {
+            setError('Please enter a valid email address');
+            return;
+        }
+
+        setLoading(true);
+
         const payload = {
-            patientName: formData.patientName,
-            phoneNumber: formData.phoneNumber,
-            email: formData.email,
+            patientName: formData.patientName.trim(),
+            phoneNumber: trimmedPhone,
+            email: trimmedEmail || undefined,
             password: formData.password,
             age: parseInt(formData.age),
             sex: formData.sex,
@@ -98,6 +114,7 @@ export default function RegisterPatientPage() {
                                 <input
                                     name="patientName"
                                     placeholder="e.g. Sakib Ahmed"
+                                    value={formData.patientName}
                                     onChange={handleChange}
                                     className="w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-10 pr-4 py-2.5 text-sm font-medium text-slate-900 outline-none transition focus:border-blue-600 focus:bg-white focus:ring-2 focus:ring-blue-600/20"
                                     required
@@ -116,7 +133,9 @@ export default function RegisterPatientPage() {
                                     </div>
                                     <input
                                         name="phoneNumber"
+                                        type="tel"
                                         placeholder="017XXXXXXXX"
+                                        value={formData.phoneNumber}
                                         onChange={handleChange}
                                         className="w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-10 pr-4 py-2.5 text-sm font-medium text-slate-900 outline-none transition focus:border-blue-600 focus:bg-white focus:ring-2 focus:ring-blue-600/20"
                                         required
@@ -136,6 +155,7 @@ export default function RegisterPatientPage() {
                                         name="email"
                                         type="email"
                                         placeholder="name@example.com"
+                                        value={formData.email}
                                         onChange={handleChange}
                                         className="w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-10 pr-4 py-2.5 text-sm font-medium text-slate-900 outline-none transition focus:border-blue-600 focus:bg-white focus:ring-2 focus:ring-blue-600/20"
                                     />
@@ -155,6 +175,7 @@ export default function RegisterPatientPage() {
                                     name="password"
                                     type="password"
                                     placeholder="••••••••"
+                                    value={formData.password}
                                     onChange={handleChange}
                                     className="w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-10 pr-4 py-2.5 text-sm font-medium text-slate-900 outline-none transition focus:border-blue-600 focus:bg-white focus:ring-2 focus:ring-blue-600/20"
                                     required
@@ -175,6 +196,7 @@ export default function RegisterPatientPage() {
                                         name="age"
                                         type="number"
                                         placeholder="e.g. 45"
+                                        value={formData.age}
                                         onChange={handleChange}
                                         className="w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-10 pr-4 py-2.5 text-sm font-medium text-slate-900 outline-none transition focus:border-blue-600 focus:bg-white focus:ring-2 focus:ring-blue-600/20"
                                         required
@@ -188,6 +210,7 @@ export default function RegisterPatientPage() {
                                 </label>
                                 <select
                                     name="sex"
+                                    value={formData.sex}
                                     onChange={handleChange}
                                     className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-sm font-medium text-slate-900 outline-none transition focus:border-blue-600 focus:bg-white focus:ring-2 focus:ring-blue-600/20"
                                 >
@@ -209,6 +232,7 @@ export default function RegisterPatientPage() {
                                     </div>
                                     <select
                                         name="location"
+                                        value={formData.location}
                                         onChange={handleChange}
                                         className="w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-10 pr-4 py-2.5 text-sm font-medium text-slate-900 outline-none transition focus:border-blue-600 focus:bg-white focus:ring-2 focus:ring-blue-600/20"
                                     >
@@ -229,6 +253,7 @@ export default function RegisterPatientPage() {
                                     </div>
                                     <select
                                         name="illness"
+                                        value={formData.illness}
                                         onChange={handleChange}
                                         className="w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-10 pr-4 py-2.5 text-sm font-medium text-slate-900 outline-none transition focus:border-blue-600 focus:bg-white focus:ring-2 focus:ring-blue-600/20"
                                     >

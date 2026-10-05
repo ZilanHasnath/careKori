@@ -19,6 +19,9 @@ import {
     ArrowRight
 } from 'lucide-react';
 
+const BD_PHONE_REGEX = /^(?:\+8801|8801|01)[3-9]\d{8}$/;
+const EMAIL_REGEX = /^[a-zA-Z0-9](?:[a-zA-Z0-9._%+-]*[a-zA-Z0-9])?@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/;
+
 export default function RegisterCaregiverPage() {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
@@ -48,11 +51,28 @@ export default function RegisterCaregiverPage() {
 
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
-        setLoading(true);
         setError(null);
+
+        const trimmedPhone = formData.phoneNumber.trim();
+        if (!BD_PHONE_REGEX.test(trimmedPhone)) {
+            setError('Please enter a valid Bangladeshi phone number (e.g., 017XXXXXXXX or +88017XXXXXXXX)');
+            return;
+        }
+
+        const trimmedEmail = formData.email.trim();
+        if (trimmedEmail && !EMAIL_REGEX.test(trimmedEmail)) {
+            setError('Please enter a valid email address');
+            return;
+        }
+
+        setLoading(true);
 
         const payload = {
             ...formData,
+            name: formData.name.trim(),
+            phoneNumber: trimmedPhone,
+            email: trimmedEmail || undefined,
+            nationalIdPassportNo: formData.nationalIdPassportNo.trim(),
             speciality: [formData.speciality],
             expectedSalary: parseInt(formData.expectedSalary),
             age: parseInt(formData.age),
@@ -113,6 +133,7 @@ export default function RegisterCaregiverPage() {
                                 <input
                                     name="name"
                                     placeholder="e.g. Nasreen Akter"
+                                    value={formData.name}
                                     onChange={handleChange}
                                     className="w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-10 pr-4 py-2.5 text-sm font-medium text-slate-900 outline-none transition focus:border-amber-500 focus:bg-white focus:ring-2 focus:ring-amber-500/20"
                                     required
@@ -131,7 +152,9 @@ export default function RegisterCaregiverPage() {
                                     </div>
                                     <input
                                         name="phoneNumber"
+                                        type="tel"
                                         placeholder="017XXXXXXXX"
+                                        value={formData.phoneNumber}
                                         onChange={handleChange}
                                         className="w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-10 pr-4 py-2.5 text-sm font-medium text-slate-900 outline-none transition focus:border-amber-500 focus:bg-white focus:ring-2 focus:ring-amber-500/20"
                                         required
@@ -151,6 +174,7 @@ export default function RegisterCaregiverPage() {
                                         name="email"
                                         type="email"
                                         placeholder="name@example.com"
+                                        value={formData.email}
                                         onChange={handleChange}
                                         className="w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-10 pr-4 py-2.5 text-sm font-medium text-slate-900 outline-none transition focus:border-amber-500 focus:bg-white focus:ring-2 focus:ring-amber-500/20"
                                     />
@@ -171,6 +195,7 @@ export default function RegisterCaregiverPage() {
                                         name="password"
                                         type="password"
                                         placeholder="••••••••"
+                                        value={formData.password}
                                         onChange={handleChange}
                                         className="w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-10 pr-4 py-2.5 text-sm font-medium text-slate-900 outline-none transition focus:border-amber-500 focus:bg-white focus:ring-2 focus:ring-amber-500/20"
                                         required
@@ -189,6 +214,7 @@ export default function RegisterCaregiverPage() {
                                     <input
                                         name="nationalIdPassportNo"
                                         placeholder="NID or Passport No"
+                                        value={formData.nationalIdPassportNo}
                                         onChange={handleChange}
                                         className="w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-10 pr-4 py-2.5 text-sm font-medium text-slate-900 outline-none transition focus:border-amber-500 focus:bg-white focus:ring-2 focus:ring-amber-500/20"
                                         required
@@ -210,6 +236,7 @@ export default function RegisterCaregiverPage() {
                                         name="age"
                                         type="number"
                                         placeholder="e.g. 28"
+                                        value={formData.age}
                                         onChange={handleChange}
                                         className="w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-10 pr-4 py-2.5 text-sm font-medium text-slate-900 outline-none transition focus:border-amber-500 focus:bg-white focus:ring-2 focus:ring-amber-500/20"
                                         required
@@ -224,6 +251,7 @@ export default function RegisterCaregiverPage() {
                                 <div className="relative">
                                     <select
                                         name="sex"
+                                        value={formData.sex}
                                         onChange={handleChange}
                                         className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-sm font-medium text-slate-900 outline-none transition focus:border-amber-500 focus:bg-white focus:ring-2 focus:ring-amber-500/20"
                                     >
@@ -246,6 +274,7 @@ export default function RegisterCaregiverPage() {
                                         name="expectedSalary"
                                         type="number"
                                         placeholder="BDT"
+                                        value={formData.expectedSalary}
                                         onChange={handleChange}
                                         className="w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-10 pr-4 py-2.5 text-sm font-medium text-slate-900 outline-none transition focus:border-amber-500 focus:bg-white focus:ring-2 focus:ring-amber-500/20"
                                         required
@@ -265,6 +294,7 @@ export default function RegisterCaregiverPage() {
                                     </div>
                                     <select
                                         name="location"
+                                        value={formData.location}
                                         onChange={handleChange}
                                         className="w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-10 pr-3 py-2.5 text-sm font-medium text-slate-900 outline-none transition focus:border-amber-500 focus:bg-white focus:ring-2 focus:ring-amber-500/20"
                                     >
@@ -285,6 +315,7 @@ export default function RegisterCaregiverPage() {
                                     </div>
                                     <select
                                         name="speciality"
+                                        value={formData.speciality}
                                         onChange={handleChange}
                                         className="w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-10 pr-3 py-2.5 text-sm font-medium text-slate-900 outline-none transition focus:border-amber-500 focus:bg-white focus:ring-2 focus:ring-amber-500/20"
                                     >
@@ -305,6 +336,7 @@ export default function RegisterCaregiverPage() {
                                     </div>
                                     <select
                                         name="experience"
+                                        value={formData.experience}
                                         onChange={handleChange}
                                         className="w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-10 pr-3 py-2.5 text-sm font-medium text-slate-900 outline-none transition focus:border-amber-500 focus:bg-white focus:ring-2 focus:ring-amber-500/20"
                                     >

@@ -3,6 +3,9 @@ import bcrypt from 'bcryptjs';
 import dbConnect from '@/lib/db';
 import FamilyMember from '@/lib/models/FamilyMember';
 
+const BD_PHONE_REGEX = /^(?:\+8801|8801|01)[3-9]\d{8}$/;
+const EMAIL_REGEX = /^[a-zA-Z0-9](?:[a-zA-Z0-9._%+-]*[a-zA-Z0-9])?@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/;
+
 export async function POST(request: Request) {
     try {
         await dbConnect();
@@ -22,11 +25,33 @@ export async function POST(request: Request) {
             );
         }
 
-        const existingFamilyMember = await FamilyMember.findOne({ phoneNumber });
+        const trimmedPhone = phoneNumber.toString().trim();
+        if (!BD_PHONE_REGEX.test(trimmedPhone)) {
+            return NextResponse.json(
+                { error: 'Invalid Bangladeshi phone number' },
+                { status: 400 }
+            );
+        }
+
+        const trimmedEmail = email ? email.toString().trim().toLowerCase() : null;
+        if (trimmedEmail && !EMAIL_REGEX.test(trimmedEmail)) {
+            return NextResponse.json(
+                { error: 'Invalid email address format' },
+                { status: 400 }
+            );
+        }
+
+        const conflictQuery: any[] = [{ phoneNumber: trimmedPhone }];
+        if (trimmedEmail) {
+            conflictQuery.push({ email: trimmedEmail });
+        }
+
+        const existingFamilyMember = await FamilyMember.findOne({ $or: conflictQuery });
 
         if (existingFamilyMember) {
+            const conflictField = existingFamilyMember.phoneNumber === trimmedPhone ? 'phone number' : 'email';
             return NextResponse.json(
-                { error: 'Family member with this phone number already exists' },
+                { error: `Family member with this ${conflictField} already exists` },
                 { status: 409 }
             );
         }
@@ -35,8 +60,8 @@ export async function POST(request: Request) {
 
         const newFamilyMember = await FamilyMember.create({
             familyMemberName,
-            phoneNumber,
-            email,
+            phoneNumber: trimmedPhone,
+            email: trimmedEmail,
             password: hashedPassword,
             location,
             linkedPatient: [],
